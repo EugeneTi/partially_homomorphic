@@ -63,12 +63,6 @@
     <Compile Include="RSAManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EllipticCurveCryptography.Common\Cryptography.Common.csproj">
-      <Project>{dda0bddc-9b63-44e9-a028-54a343291a6e}</Project>
-      <Name>Cryptography.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="xmpir32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

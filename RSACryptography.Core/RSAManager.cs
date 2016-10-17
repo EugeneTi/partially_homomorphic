@@ -1,11 +1,9 @@
 ﻿using System.Numerics;
-using Cryptography.Common;
 using Mpir.NET;
-using RSACryptography.Core;
 
 namespace Cryptography.RSA
 {
-    public class RSAManager : CryptoManager
+    public class RSAManager
     {
         private static RSAManager _default;
         public static RSAManager Default
@@ -29,7 +27,7 @@ namespace Cryptography.RSA
 
         public static int BitLength = 1024;
 
-        public override Key GenerateKey()
+        public RSAKey GenerateKey()
         {
             mpz_t numMin = ((mpz_t)2).Power((BitLength / 2) - 1);// BigInteger.Pow(2, (BitLength / 2) - 1);
             mpz_t numMax = ((mpz_t)2).Power((BitLength / 2)); //BigInteger.Pow(2, (BitLength / 2));

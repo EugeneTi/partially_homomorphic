@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptography.ECC", "ECCryptography.Core\Cryptography.ECC.csproj", "{874DD77C-E7DE-44A5-A59C-968FCCA00118}"
 EndProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptography.Console", "ECC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptography.RSA", "RSACryptography.Core\Cryptography.RSA.csproj", "{712C2FC4-81CF-4EE2-AC34-4963904E9F69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptography.Common", "EllipticCurveCryptography.Common\Cryptography.Common.csproj", "{DDA0BDDC-9B63-44E9-A028-54A343291A6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptography.Paillier", "Cryptography.Paillier\Cryptography.Paillier.csproj", "{6ABCCBC5-4449-4A09-80F1-56691D851A06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +43,14 @@ Global
 		{712C2FC4-81CF-4EE2-AC34-4963904E9F69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{712C2FC4-81CF-4EE2-AC34-4963904E9F69}.Release|x64.ActiveCfg = Release|Any CPU
 		{712C2FC4-81CF-4EE2-AC34-4963904E9F69}.Release|x64.Build.0 = Release|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Debug|x64.Build.0 = Debug|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Release|x64.ActiveCfg = Release|Any CPU
-		{DDA0BDDC-9B63-44E9-A028-54A343291A6E}.Release|x64.Build.0 = Release|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Debug|x64.Build.0 = Debug|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Release|x64.ActiveCfg = Release|Any CPU
+		{6ABCCBC5-4449-4A09-80F1-56691D851A06}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

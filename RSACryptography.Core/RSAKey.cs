@@ -1,10 +1,8 @@
-﻿using System.Numerics;
-using Cryptography.Common;
-using Mpir.NET;
+﻿using Mpir.NET;
 
 namespace Cryptography.RSA
 {
-    public class RSAKey : Key
+    public class RSAKey
     {
         public mpz_t PrivateKey { get; set; }
 

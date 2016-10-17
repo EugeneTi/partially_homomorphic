@@ -1,10 +1,8 @@
-﻿using System.Numerics;
-using Cryptography.Common;
-using Mpir.NET;
+﻿using Mpir.NET;
 
 namespace Cryptography.ECC
 {
-    public class ECCKey : Key
+    public class ECCKey
     {
         public mpz_t PrivateKey { get; set; }
 

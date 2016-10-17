@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Numerics;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using System.Text;
-using Cryptography.Common;
 using Mpir.NET;
 
 namespace Cryptography.ECC
 {
-    public class ECCManager : CryptoManager
+    public class ECCManager
     {
         private static ECCManager _default;
         public static ECCManager Default
@@ -50,12 +46,13 @@ namespace Cryptography.ECC
             }
         }
 
+        private static ECCManager _default192;
         public static ECCManager Default192
         {
             get
             {
-                if (_default != null)
-                    return _default;
+                if (_default192 != null)
+                    return _default192;
 
                 var pStr = "6277101735386680763835789423207666416083908700390324961279";
                 var aStr = "-3";
@@ -75,9 +72,9 @@ namespace Cryptography.ECC
                     new mpz_t(BigInteger.Parse(yGStr, NumberStyles.HexNumber)),
                     new mpz_t(BigInteger.Parse(nStr, NumberStyles.Integer)));
 
-                _default = new ECCManager(curve, generator);
+                _default192 = new ECCManager(curve, generator);
 
-                return _default;
+                return _default192;
             }
         }
 
@@ -91,6 +88,24 @@ namespace Cryptography.ECC
             GeneratorPoint = generator;
         }
 
+        /// <summary>
+        /// Encode number into elliptic curve poin. Encrypt encoded point.
+        /// </summary>
+        /// <param name="number">Number for encription</param>
+        /// <param name="openKey">Open key</param>
+        /// <returns>Item1 - tip for decription. Left part of encrypted number
+        /// Item2 - encrypted number. Right part</returns>
+        public EncriptionResult EncryptNumber(int number, ECCPoint openKey)
+        {
+            var seancePrivateKey = GeneratePrivateKey(GeneratorPoint.PointDimention);
+            var encodedNumber = ECCPoint.Multiply(number, GeneratorPoint);
+
+            var left = ECCPoint.Multiply(seancePrivateKey, GeneratorPoint); //tip for decryption
+            var right = encodedNumber + ECCPoint.Multiply(seancePrivateKey, openKey); //encrypted point
+
+            return new EncriptionResult(left, right);
+        }
+
         public byte[] Encrypt(string openText)
         {
             return null;
@@ -101,17 +116,22 @@ namespace Cryptography.ECC
             return null;
         }
 
-        public override Key GenerateKey()
+        private mpz_t GeneratePrivateKey(mpz_t demention)
         {
             Random random = new Random();
             var bytes = new byte[64];
             random.NextBytes(bytes);
 
-            var privateKey = new mpz_t(bytes, 0) % GeneratorPoint.PointDimention;
+            var privateKey = new mpz_t(bytes, 0) % demention;
             if (privateKey < 0) privateKey = privateKey * -1;
+            return privateKey;
+        }
+
+        public ECCKey GenerateKey()
+        {
             var key = new ECCKey();
-            key.PrivateKey = privateKey;
-            key.OpenKey = ECCPoint.Multiply(privateKey, GeneratorPoint);
+            key.PrivateKey = GeneratePrivateKey(GeneratorPoint.PointDimention);
+            key.OpenKey = ECCPoint.Multiply(key.PrivateKey, GeneratorPoint);
 
             key.P = GeneratorPoint.Curve.FieldModule;
             key.G = GeneratorPoint;
@@ -128,6 +148,25 @@ namespace Cryptography.ECC
             var privateKey = new mpz_t(bytes, 0) % GeneratorPoint.PointDimention;
             if (privateKey < 0) privateKey = privateKey * -1;
             return ECCPoint.Multiply(privateKey, GeneratorPoint);
+        }
+    }
+
+    public class EncriptionResult
+    {
+        /// <summary>
+        /// Tip for decription
+        /// </summary>
+        public ECCPoint Left { get; set; }
+
+        /// <summary>
+        /// Encrypted number
+        /// </summary>
+        public ECCPoint Right { get; set; }
+
+        public EncriptionResult(ECCPoint left, ECCPoint right)
+        {
+            Left = left;
+            Right = right;
         }
     }
 }
