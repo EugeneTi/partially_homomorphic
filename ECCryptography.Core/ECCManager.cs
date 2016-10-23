@@ -78,6 +78,40 @@ namespace Cryptography.ECC
             }
         }
 
+
+        private static ECCManager _default256;
+        public static ECCManager Default256
+        {
+            get
+            {
+                if (_default256 != null)
+                    return _default256;
+
+                var pStr = "115792089210356248762697446949407573530086143415290314195533631308867097853951";
+                var aStr = "-3";
+                var bStr = "5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b";
+
+                var xGStr = "6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296";
+                var yGStr = "4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5";
+                var nStr = "115792089210356248762697446949407573529996955224135760342422259061068512044369";
+
+                var p = new mpz_t(BigInteger.Parse(pStr, NumberStyles.Integer));
+                var a = new mpz_t(BigInteger.Parse(aStr, NumberStyles.Integer));
+                var b = new mpz_t(BigInteger.Parse(bStr, NumberStyles.HexNumber));
+
+                var curve = new EllipticCurve(a, b, p);
+
+                var generator = curve.SetGeneratorPoint(
+                    new mpz_t(BigInteger.Parse(xGStr, NumberStyles.HexNumber)),
+                    new mpz_t(BigInteger.Parse(yGStr, NumberStyles.HexNumber)),
+                    new mpz_t(BigInteger.Parse(nStr, NumberStyles.Integer)));
+
+                _default256 = new ECCManager(curve, generator);
+
+                return _default256;
+            }
+        }
+
         public EllipticCurve Curve { get; protected set; }
 
         public GeneratorPoint GeneratorPoint { get; set; }
@@ -104,6 +138,24 @@ namespace Cryptography.ECC
             var right = encodedNumber + ECCPoint.Multiply(seancePrivateKey, openKey); //encrypted point
 
             return new EncriptionResult(left, right);
+        }
+
+        public EncriptionResult EncryptEncodedNumber(ECCPoint encodedNumber, ECCPoint openKey)
+        {
+            var seancePrivateKey = GeneratePrivateKey(GeneratorPoint.PointDimention);
+
+            var left = ECCPoint.Multiply(seancePrivateKey, GeneratorPoint); //tip for decryption
+            var right = encodedNumber + ECCPoint.Multiply(seancePrivateKey, openKey); //encrypted point
+
+            return new EncriptionResult(left, right);
+        }
+
+        public EncriptionResult Add(EncriptionResult a, EncriptionResult b)
+        {
+            var sResRight = a.Right + b.Right;
+            var sResLeft = a.Left + b.Left;
+            
+            return new EncriptionResult(sResLeft, sResRight);
         }
 
         public byte[] Encrypt(string openText)

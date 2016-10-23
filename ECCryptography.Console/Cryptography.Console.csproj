@@ -76,6 +76,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cryptography.Paillier\Cryptography.Paillier.csproj">
+      <Project>{6abccbc5-4449-4a09-80f1-56691d851a06}</Project>
+      <Name>Cryptography.Paillier</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ECCryptography.Core\Cryptography.ECC.csproj">
       <Project>{874dd77c-e7de-44a5-a59c-968fcca00118}</Project>
       <Name>Cryptography.ECC</Name>
