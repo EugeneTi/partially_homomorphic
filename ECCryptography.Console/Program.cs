@@ -16,19 +16,32 @@ namespace Cryptography.Console
 
             //var test = PaillierManager.Default.EncryptNumber(1, keyPaillier);
             //var resTest = PaillierManager.Default.DecryptNumber(test, keyPaillier);
-
+            string paillierLog = "";
             StartTimer();
             mpz_t sumPaillier = PaillierManager.Default.EncryptNumber(0, keyPaillier);
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i <= 10000; i++)
             {
                 var newNumber = PaillierManager.Default.EncryptNumber(i+1, keyPaillier);
 
                 sumPaillier = PaillierManager.Default.Multiply(sumPaillier, newNumber, keyPaillier);
+
+                if (i%100 == 0)
+                {
+                    var time = StopWatch.Elapsed;
+                    paillierLog += $"({i}) - {time.Minutes}:{time.Seconds}.{time.Milliseconds:000}" + Environment.NewLine;
+                }
             }
-            var m = PaillierManager.Default.DecryptNumber(sumPaillier, keyPaillier);
             StopTimer();
+            StartTimer();
+            var m = PaillierManager.Default.DecryptNumber(sumPaillier, keyPaillier);
+            var time2 = StopWatch.Elapsed;
+            paillierLog += $"(decrypt) - {time2.Minutes}:{time2.Seconds}.{time2.Milliseconds:000}" + Environment.NewLine;
+            StopTimer();
+            var file = new FileWriter();
+            file.Write(paillierLog);
             
-            System.Console.WriteLine(m.ToString());
+            System.Console.WriteLine(paillierLog);
+            //System.Console.WriteLine(m.ToString());
             //System.Console.ReadKey();
 
 
@@ -43,33 +56,49 @@ namespace Cryptography.Console
             var sResRight = s1.Right + s2.Right + s3.Right;
             var sResLeft = s1.Left + s2.Left + s3.Left;
             var res = sResRight - ECCPoint.Multiply(keyEcc.PrivateKey, sResLeft);
-            StartTimer();
-            var encodedNumbers = new List<ECCPoint>();
-            for (var i = 0; i < 1000; i++)
-            {
-                var encodedNumber = ECCPoint.Multiply(i+1, keyEcc.G);
-                encodedNumbers.Add(encodedNumber);
-            }
-            StopTimer();
+
             StartTimer();
             List<ECCPoint> rightParts = new List<ECCPoint>(1000);
             List<ECCPoint> leftParts = new List<ECCPoint>(1000);
-            for (var i = 0; i < 1000; i++)
+            ECCPoint sumRight = null;
+            ECCPoint sumLeft = null;
+
+            string eccLog = "";
+
+            for (var i = 0; i <= 10000; i++)
             {
-                var encryptedNumber = ECCManager.Default256.EncryptEncodedNumber(encodedNumbers[i], keyEcc.OpenKey);
+                var encryptedNumber = ECCManager.Default256.EncryptNumber(i+1, keyEcc.OpenKey);
                 rightParts.Add(encryptedNumber.Right);
                 leftParts.Add(encryptedNumber.Left);
+
+                if (i == 2)
+                {
+                    sumRight = rightParts[0] + rightParts[1];
+                    sumLeft = leftParts[0] + leftParts[1];
+                }
+
+                if (i > 2)
+                {
+                    sumRight = sumRight + encryptedNumber.Right;
+                    sumLeft = sumLeft + encryptedNumber.Left;
+                }
+
+                if (i % 100 == 0)
+                {
+                    var time = StopWatch.Elapsed;
+                    eccLog += $"({i}) - {time.Minutes}:{time.Seconds}.{time.Milliseconds:000}" + Environment.NewLine;
+                }
             }
             StopTimer();
             StartTimer();
-            var sumRight = rightParts[0] + rightParts[1];
-            var sumLeft = leftParts[0] + leftParts[1];
-            for (int i = 2; i < 1000; i++)
-            {
-                sumRight = sumRight + rightParts[i];
-                sumLeft = sumLeft + leftParts[i];
-            }
+                var result = sumRight - ECCPoint.Multiply(keyEcc.PrivateKey, sumLeft);
+                var time1 = StopWatch.Elapsed;
+                eccLog += $"(decrypt) - {time1.Minutes}:{time1.Seconds}.{time1.Milliseconds:000}" + Environment.NewLine;
             StopTimer();
+
+            file.Write(eccLog);
+            
+            System.Console.WriteLine(eccLog);
             //var s1 = ECCManager.Default.EncryptNumber(numbers[0], keyPairs.OpenKey);
             //var s2 = ECCManager.Default.EncryptNumber(numbers[1], keyPairs.OpenKey);
             //var s3 = ECCManager.Default.EncryptNumber(numbers[2], keyPairs.OpenKey);
